@@ -28,7 +28,7 @@ Before you begin, ensure that you have the following software installed on your 
 
 Follow these steps to set up the project on your local machine:
 
-### 1. Clone the Repository
+1. **Clone the Repository**:
 
 Start by cloning the project repository to your local machine:
 
@@ -38,12 +38,12 @@ git clone https://github.com/hamza3abbas/auth.git
 ```bash
 cd auth
 ```
-### 2. Install Node.js Dependencies
+2. **Install Node.js Dependencies**
 
 ```bash
 npm install
 ```
-### 3. Set Up Docker and Prisma
+3. **Set Up Docker and Prisma**
 ```bash
 docker-compose up -d
 ```
@@ -53,9 +53,9 @@ npx prisma migrate dev
 ```bash
 npx prisma generate
 ```
-**_Important:_** Make Sure You Copied .env file env.txt example before running npm run build.
-## Development 
 
+## Development 
+**_Important:_** Make Sure You Copied .env file env.txt example before running npm run build.
 ```bash
 npm run build
 ```
@@ -64,12 +64,12 @@ npm run dev
 ```
 
 ## Additional Commands
-### 1. To View Database Localy
+1. **To View Database Localy**
 ```bash
 npx prisma studio
 ```
 ## License
 
-This project is licensed under the ABS COMPANY License .
+This project is licensed under the ABS SOLUTION COMPANY License .
 
-© [2024] ABS COMPANY. All rights reserved.
+© [2024] ABS SOLUTION COMPANY. All rights reserved.
