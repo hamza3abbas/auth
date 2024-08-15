@@ -43,10 +43,15 @@ cd auth
 ```bash
 npm install
 ```
-3. **Set Up Docker and Prisma**
+
+3. **Set Up Docker**
 ```bash
 docker-compose up -d
 ```
+
+⚠️ **_Important:_**Before You Complete Make Sure You Replace "DBURL" with real value
+
+4. **Prisma**
 ```bash
 npx prisma migrate dev
 ```
@@ -55,7 +60,7 @@ npx prisma generate
 ```
 
 ## Development 
-⚠️ **_Important:_** Make Sure You Copied .env file env.txt and replace with actual values
+⚠️ **_Important:_**Before You Complete Make Sure You Copied .env file env.txt and replace with actual values
 ```bash
 npm run build
 ```
