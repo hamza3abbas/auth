@@ -1,70 +1,78 @@
 import { sendEmail } from "../actions/sendEmail";
 
-
 export const sendTwoFactorTokenEmail = async (
-  email:string,
-  token:string,
+  email: string,
+  username: string,
+  authenticationCode: string,
+  codeExpiryTime: string,
+  companyName: string,
 ) => {
-
-     try {
-      await sendEmail({
-        to: email,
-        subject: `2FA CODE`,
-        htmlContent: `<p>yYour 2FA Code : ${token}`,
-      });
-     } catch (error) {
-      console.log(error);
-     }
-
-      
-} 
+  try {
+    await sendEmail({
+      to: [email],
+      subject: `2FA CODE`,
+      templateId: 1, 
+      params: {
+        username,
+        authenticationcode: authenticationCode,
+        codeexpirytime: codeExpiryTime,
+        companyname: companyName,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 
 export const sendVerificationEmail = async (
-    email:string,
-    token:string,
+  email: string,
+  username: string,
+  token: string,
+  companyName: string,
 ) => {
+  const defaultAuthPath = process.env.NEXT_BASE_URL_AUTH!;
+  const confirmationLink = `${defaultAuthPath}new-verification?token=${token}`;
 
-    const defaultAuthPath = process.env.NEXT_BASE_URL_AUTH!;
+  try {
+    await sendEmail({
+      to: [email],
+      subject: `Confirmation Link`,
+      templateId: 2,
+      params: {
+        username,
+        confirmationlink: confirmationLink,
+        companyname: companyName,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    const confirmLink = `${defaultAuthPath}new-verification?token=${token}`;
-
-
-    console.log(confirmLink);
-       try {
-        await sendEmail({
-        
-          to: email,
-          subject: `Confirmation Link`,
-          htmlContent: `<p>Click <a href="${confirmLink}">here</a> to confirm email.`,
-        });
-       } catch (error) {
-        console.log(error);
-       }
-
-        
-} 
 
 export const sendPasswordResetEmail = async (
-  email:string,
-  token:string,
+  email: string,
+  username: string,
+  token: string,
+  companyName: string,
 ) => {
-
   const defaultAuthPath = process.env.NEXT_BASE_URL_AUTH!;
-
   const resetLink = `${defaultAuthPath}new-password?token=${token}`;
 
+  try {
+    await sendEmail({
+      to: [email],
+      subject: `Reset Your Password`,
+      templateId: 3, 
+      params: {
+        username,
+        passwordresetlink: resetLink,
+        companyname: companyName,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  console.log(resetLink);
-     try {
-      await sendEmail({
-        to: email,
-        subject: `Reset Your Password`,
-        htmlContent: `<p>Click <a href="${resetLink}">Here</a> To Reset Your Email.`,
-      });
-     } catch (error) {
-      console.log(error);
-     }
-
-      
-} 

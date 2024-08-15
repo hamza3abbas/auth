@@ -33,7 +33,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const verificationToken = await generateVerificationToken(existingUser.email);
     await sendVerificationEmail(
       verificationToken.email,
+      existingUser.name ?? email,
       verificationToken.token,
+      "ABS SOLUTION"
     );
   
     return { success: "Confirmation Email Sent" };
@@ -81,7 +83,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
    }else{
     const twoFactorToken = await generateTwoFactorToken(existingUser.email);
 
-    await sendTwoFactorTokenEmail(twoFactorToken.email,twoFactorToken.token); 
+    await sendTwoFactorTokenEmail(twoFactorToken.email,existingUser.name ?? email,twoFactorToken.token , '15 MINTUES' ,"ABS SOLUTION"); 
     
     
     return {twoFactor : true}  
