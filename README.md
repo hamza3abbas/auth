@@ -55,7 +55,7 @@ npx prisma generate
 ```
 
 ## Development 
-⚠️ **_Important:_** This is an alert message.
+⚠️ **_Important:_** Make Sure You Copied .env file env.txt and replace with actual values
 ```bash
 npm run build
 ```
