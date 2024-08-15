@@ -19,13 +19,7 @@ To get started with this project, follow the detailed steps provided in each sec
 
 Before you begin, ensure that you have the following software installed on your machine:
 
-1. **Node.js**:
-   - Download and install Node.js from the [official website](https://nodejs.org/).
-
-2. **Docker**:
-   - Download and install Docker from the [official Docker website](https://www.docker.com/get-started).
-
-3. **Docker Compose**:
+1. **Docker Compose**:
    - Docker Compose is typically included with Docker Desktop. To confirm that Docker Compose is installed, run the following command in your terminal:
    
      ```bash
@@ -47,9 +41,6 @@ cd auth
 
 ### 2. Install Node.js Dependencies
 
-Next, install the required Node.js packages by running:
-
-
 ```bash
 npm install
 ```
@@ -58,14 +49,16 @@ npm install
 
 ```bash
 docker-compose up -d
-
+```
+```bash
 npx prisma migrate dev
+```
+```bash
 npx prisma generate
-
 ```
 
 ### 4. Development
-
+Make Sure You Copied .env file env.txt example before running npm run build 
 ```bash
 npm run build
 
