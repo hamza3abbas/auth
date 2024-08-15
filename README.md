@@ -44,13 +44,13 @@ cd auth
 npm install
 ```
 
-⚠️ **Important:**Before You Complete Make Sure You Replace "DBURL" with real value
+**Important:**Before You Complete Make Sure You Create .env File Simillar To env.text 
 
 3. **Set Up Docker**
 ```bash
 docker-compose up -d
 ```
-**_Important:_**Replace Your DATABASE_URL In .env
+⚠️ **_Important:_**BeforeYou Continue Make Sure You Replace Your DATABASE_URL In .env
 
 4. **Prisma**
 ```bash
@@ -70,6 +70,7 @@ npm run dev
 
 ## Additional Commands
 1. **To View Database Localy**
+  - Open New Terminal And Run:
 ```bash
 npx prisma studio
 ```
