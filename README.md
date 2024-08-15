@@ -30,7 +30,7 @@ Follow these steps to set up the project on your local machine:
 
 1. **Clone the Repository**:
 
-Start by cloning the project repository to your local machine:
+ - Start by cloning the project repository to your local machine:
 
 ```bash
 git clone https://github.com/hamza3abbas/auth.git
