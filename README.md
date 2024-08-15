@@ -61,9 +61,11 @@ npx prisma generate
 Make Sure You Copied .env file env.txt example before running npm run build 
 ```bash
 npm run build
-
+```
+```bash
 npm run dev
 ```
+
 ### 5. To View Database Localy
 
 ```bash
