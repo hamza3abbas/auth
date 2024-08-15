@@ -1,0 +1,167 @@
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  USER
+  EMPLOYEE
+  MANAGER
+  DRIVER
+  ADMIN
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String?   @unique
+  emailVerified         DateTime? @map("email_verified")
+  image                 String?
+  password              String?
+  role                  UserRole  @default(USER)
+  accounts              Account[]
+  isTwoFactorEnabled    Boolean   @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+
+  // Relations to CRM Models
+  leads                 Lead[]      @relation("UserLeads")
+  customers             Customer[]  @relation("UserCustomers")
+  invoices              Invoice[]   @relation("UserInvoices")
+
+  @@map("users")
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String  @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  id            String    @id @default(cuid())
+  email         String
+  token         String    @unique
+  expires       DateTime 
+
+  @@unique([email,token ])
+}
+
+model PasswordResetToken {
+  id            String    @id @default(cuid())
+  email         String
+  token         String    @unique
+  expires       DateTime 
+
+  @@unique([email,token])
+}
+
+model TwoFactorToken {
+  id            String    @id @default(cuid())
+  email         String
+  token         String    @unique
+  expires       DateTime 
+
+  @@unique([email,token])
+}
+
+model TwoFactorConfirmation {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields:[userId],references: [id], onDelete:Cascade)  
+
+  @@unique([userId])
+}
+
+// New CRM Models
+
+model Lead {
+  id           String    @id @default(cuid())
+  name         String
+  email        String?
+  phone        String?
+  statusId     String
+  status       LeadStatus @relation(fields: [statusId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  assignedTo   String?
+  assignedUser User?     @relation("UserLeads", fields: [assignedTo], references: [id])
+
+  @@map("leads")
+}
+
+model Customer {
+  id           String    @id @default(cuid())
+  name         String
+  email        String?   @unique
+  phone        String?
+  address      String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  createdBy    String?
+  creator      User?     @relation("UserCustomers", fields: [createdBy], references: [id])
+  invoices     Invoice[] @relation("CustomerInvoices")
+
+  @@map("customers")
+}
+
+model Product {
+  id           String    @id @default(cuid())
+  name         String
+  description  String?
+  price        Float
+  sku          String?   @unique
+  invoices     InvoiceItem[]
+
+  @@map("products")
+}
+
+model Invoice {
+  id           String       @id @default(cuid())
+  invoiceNumber String      @unique
+  createdAt    DateTime     @default(now())
+  dueDate      DateTime
+  customerId   String?
+  customer     Customer?    @relation("CustomerInvoices", fields: [customerId], references: [id])
+  createdBy    String?
+  creator      User?        @relation("UserInvoices", fields: [createdBy], references: [id])
+  items        InvoiceItem[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          String    @id @default(cuid())
+  quantity    Int
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+  invoiceId   String
+  invoice     Invoice   @relation(fields: [invoiceId], references: [id])
+
+  @@map("invoice_items")
+}
+
+model LeadStatus {
+  id    String   @id @default(cuid())
+  name  String   @unique
+  leads Lead[]
+
+  @@map("lead_statuses")
+}
