@@ -1,16 +1,78 @@
-# Auth Next JS
+# Project Name
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
+- [Additional Commands](#additional-commands)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Getting Started
 
-Follow these steps to set up and work with the project.
+To get started with this project, follow the detailed steps provided in each section below.
 
-### Prerequisites
+## Prerequisites
 
-Make sure you have the following installed on your machine:
+Before you begin, ensure that you have the following software installed on your machine:
 
-- **Node.js**: [Download and install Node.js](https://nodejs.org/)
-- **Docker**: [Download and install Docker](https://www.docker.com/get-started)
-- **Docker Compose**: Docker Compose is typically included with Docker Desktop, but make sure it's installed by running:
-  
-  ```bash
-  docker-compose --version
+1. **Node.js**:
+   - Download and install Node.js from the [official website](https://nodejs.org/).
+
+2. **Docker**:
+   - Download and install Docker from the [official Docker website](https://www.docker.com/get-started).
+
+3. **Docker Compose**:
+   - Docker Compose is typically included with Docker Desktop. To confirm that Docker Compose is installed, run the following command in your terminal:
+   
+     ```bash
+     docker-compose --version
+     ```
+
+## Installation
+
+Follow these steps to set up the project on your local machine:
+
+### 1. Clone the Repository
+
+Start by cloning the project repository to your local machine:
+
+```bash
+git clone https://github.com/hamza3abbas/auth.git
+cd auth
+```
+
+### 2. Install Node.js Dependencies
+
+Next, install the required Node.js packages by running:
+
+
+```bash
+npm install
+```
+
+### 3. Set Up Docker and Prisma
+
+```bash
+docker-compose up -d
+
+npx prisma migrate dev
+npx prisma generate
+
+```
+
+### 4. Development
+
+```bash
+npm run build
+
+npm run dev
+```
+### 5. To View Database Localy
+
+```bash
+npx prisma studio
+```
