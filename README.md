@@ -55,7 +55,7 @@ npx prisma generate
 ```
 
 ## Development 
-**_Important:_** Make Sure You Copied .env file env.txt example before running npm run build.
+⚠️ **_Important:_** This is an alert message.
 ```bash
 npm run build
 ```
