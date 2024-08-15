@@ -26,7 +26,7 @@ Before you begin, ensure that you have the following software installed on your 
 
 ## Installation
 
-Follow these steps to set up the project on your local machine:
+Follow these steps to set up the projects on your local machine:
 
 1. **Clone the Repository**:
 
