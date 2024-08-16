@@ -1,6 +1,5 @@
 import { poppins } from "@/src/lib/fonts";
 
-import { cn } from "@/src/lib/utils";
 
 const font = poppins;
 
@@ -10,16 +9,13 @@ interface CardHeaderProps {
 }
 
 export const Header = ({ label ,sublabel = '' }: CardHeaderProps) => {
-    return (<div className="w-full flex flex-col gap-y-4 items-center justify-center">
-        <h1 className={cn("text-3xl font-semibold",)}>
-            🔐 Auth
-        </h1>
-        <p className="text-muted-foreground text-sm text-center">
+    return ( <div className="flex flex-col space-y-2 text-center">
+        <h1 className="text-2xl font-semibold tracking-tight">
             {label}
-        </p>
+        </h1>
         {
             sublabel && (
-                <p className="text-muted-foreground text-sm text-center">
+                <p className="text-sm text-muted-foregroundr">
                 {sublabel}
             </p>
             )
