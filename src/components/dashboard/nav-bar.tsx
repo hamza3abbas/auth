@@ -2,11 +2,14 @@ import { BarChartIcon, BoxIcon, DropdownMenuIcon, HomeIcon, PersonIcon } from "@
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import Link from "next/link";
-import { FaSearch, FaShoppingCart, FaUserCircle } from "react-icons/fa";
+
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+
+import { LogoutButton } from "../auth/logout";
+import { UserCircle,ShoppingCart, Search } from "lucide-react";
 
 const DashboardNavBar = () => {
   return (
@@ -42,7 +45,7 @@ const DashboardNavBar = () => {
             href="#"
             className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
           >
-            <FaShoppingCart  />
+            <ShoppingCart  className="h-5 w-5" />
             Orders
             <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
               6
@@ -92,7 +95,7 @@ const DashboardNavBar = () => {
       <form>
         <div className="relative">
           <span  className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
-          <FaSearch />
+          <Search className="h-5 w-5" />
           </span>
           <Input
             type="search"
@@ -106,7 +109,7 @@ const DashboardNavBar = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
           <span className="h-5 w-5">
-          <FaUserCircle  />
+          <UserCircle className="h-5 w-5" />
           </span>
           
           <span className="sr-only">Toggle user menu</span>
@@ -115,10 +118,14 @@ const DashboardNavBar = () => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <Link href={'/dashboard/settings'}>
         <DropdownMenuItem>Settings</DropdownMenuItem>
+        </Link>
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuSeparator />
+        <LogoutButton>
         <DropdownMenuItem>Logout</DropdownMenuItem>
+        </LogoutButton>
       </DropdownMenuContent>
     </DropdownMenu>
   </header>

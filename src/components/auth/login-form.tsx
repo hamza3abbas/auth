@@ -14,6 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { login } from "@/src/actions/login";
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "../ui/input-otp";
 export const LoginForm = () => {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [error, setError] = useState<string | undefined>("");
@@ -73,14 +74,22 @@ export const LoginForm = () => {
           <div className="space-y-4">
             {showTwoFactor && (
               <FormField control={form.control} name="code" render={({ field }) => (
-              <FormItem>
+              <FormItem className="justify-center">
                 <FormLabel>Two Factor Auth</FormLabel>
                 <FormControl>
-                  <Input
-                    disabled={isPending}
-                    {...field}
-                    placeholder="Enter 2FA Code"
-                  />
+                  <div className="">
+                  <InputOTP maxLength={6} {...field}>
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+                  </div>
+              
                 </FormControl>
                 <FormMessage />
               </FormItem>
