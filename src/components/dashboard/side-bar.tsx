@@ -53,7 +53,7 @@ const Sidebar = () => {
             <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
               <span>ABS SOLUTION</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
+            <Button variant="secondary" size="icon" className="ml-auto h-8 w-8">
               <BellIcon className="h-4 w-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
