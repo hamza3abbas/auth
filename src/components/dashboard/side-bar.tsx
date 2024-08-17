@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/src/lib/utils';
 import { Arrow } from '@radix-ui/react-dropdown-menu';
+import { Settings } from 'lucide-react';
 
 
 const Sidebar = () => {
@@ -15,9 +16,9 @@ const Sidebar = () => {
     const navItems = {
       ADMIN: [
         { name: 'Dashboard', path: '/dashboard', icon: <DashboardIcon className="h-4 w-4" /> },
-        { name: 'Customers', path: '/customers', icon: <PersonIcon className="h-4 w-4" /> },
-        { name: 'Leads', path: '/leads', icon: <ArrowUpIcon className="h-4 w-4" /> },
-        { name: 'Invoices', path: '/invoices', icon: <PaperPlaneIcon className="h-4 w-4" /> },
+        { name: 'Customers', path: '/dashboard/customers', icon: <PersonIcon className="h-4 w-4" /> },
+        { name: 'Leads', path: '/dashboard/leads', icon: <ArrowUpIcon className="h-4 w-4" /> },
+        { name: 'Invoices', path: '/dashboard/invoices', icon: <PaperPlaneIcon className="h-4 w-4" /> },
       ],
       MANAGER: [
         { name: 'Home', path: '#', icon: <HomeIcon className="h-4 w-4" /> },
@@ -78,13 +79,21 @@ const Sidebar = () => {
           </div>
           <div className="mt-auto p-4">
             <div x-chunk="dashboard-02-chunk-0">
-              <div className="p-2 pt-0 md:p-4">
-                <h4 className="font-semibold">Upgrade to Pro</h4>
-                <p className="text-sm text-muted">Unlock all features and get unlimited access to our support team.</p>
-                <Button className="w-full mt-2 rounded py-2">
-                  Upgrade
-                </Button>
-              </div>
+            
+              <Link
+                 
+                  href={'/dashboard/settings'}
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 transition-all',
+                    pathname === '/dashboard/settings'
+                      ? 'bg-muted text-primary'
+                      : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  {<Settings/>}
+                  {'Settings'}
+                </Link>
+              
             </div>
           </div>
         </div>

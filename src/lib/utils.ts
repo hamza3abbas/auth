@@ -11,3 +11,11 @@ export function truncateString(text: string, maxLength: number): string {
   
   return text.slice(0, maxLength) + '...';
 }
+export const getBreadcrumbs = (pathname: string) => {
+  const segments = pathname.split('/').filter(Boolean);
+  const breadcrumbs = segments.map((segment, index) => {
+    const href = '/' + segments.slice(0, index + 1).join('/');
+    return { label: segment.charAt(0).toUpperCase() + segment.slice(1), href };
+  });
+  return breadcrumbs;
+};

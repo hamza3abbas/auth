@@ -13,7 +13,7 @@
  /**
   * The path where logged in users will be redirected 
   */
-export const DEFAULT_LOGIN_REDIRECT = "/settings";
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
 
  /**
   * An array of routes that are used for authentication

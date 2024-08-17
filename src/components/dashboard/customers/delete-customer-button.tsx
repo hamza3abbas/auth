@@ -22,7 +22,7 @@ const DeleteCustomerButton = ({ customerId }: Props) => {
         });
 
         if (!response.ok) throw new Error('Failed to delete customer');
-        router.push('/customers');
+        router.push('/dashboard/customers');
       } catch (error) {
         setError((error as Error).message);
       }

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
@@ -9,25 +9,61 @@ import { FormError } from "@/src/components/form-error";
 import { FormSuccess } from "@/src/components/form-success";
 import { CustomerUpdateSchema } from "@/src/schemas";
 import * as z from "zod";
+import { Customer } from "@prisma/client";
+
 type CustomerUpdateFormProps = {
   customerId: string;
 };
 
 const CustomerUpdateForm = ({ customerId }: CustomerUpdateFormProps) => {
   const [isPending, startTransition] = useTransition();
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
   const form = useForm<z.infer<typeof CustomerUpdateSchema>>({
     resolver: zodResolver(CustomerUpdateSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+    },
   });
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const response = await fetch(`/api/customers/${customerId}`);
+        if (!response.ok) throw new Error('Failed to fetch customer');
+        const data: Customer = await response.json();
+        setCustomer(data);
+
+        // Update form values when customer data is fetched
+        form.reset({
+          name: data.name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          address: data.address || "",
+        });
+      } catch (err) {
+        const error = err as Error;
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCustomer();
+  }, [customerId, form]);
 
   const onSubmit = (values: z.infer<typeof CustomerUpdateSchema>) => {
     setError("");
     setSuccess("");
-
+    setLoading(true);
     startTransition(() => {
-      fetch(`/api/customers/${customerId}`, {
+      fetch(`/api/customers/${customer?.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -43,6 +79,9 @@ const CustomerUpdateForm = ({ customerId }: CustomerUpdateFormProps) => {
         })
         .catch((error) => {
           setError(error.message);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     });
   };
@@ -55,7 +94,7 @@ const CustomerUpdateForm = ({ customerId }: CustomerUpdateFormProps) => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input disabled={isPending} {...field} placeholder="John Doe" />
+                <Input disabled={isPending || loading} {...field} placeholder="John Doe" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -64,7 +103,7 @@ const CustomerUpdateForm = ({ customerId }: CustomerUpdateFormProps) => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input disabled={isPending} {...field} placeholder="john.doe@example.com" type="email" />
+                <Input disabled={isPending || loading} {...field} placeholder="john.doe@example.com" type="email" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -73,7 +112,7 @@ const CustomerUpdateForm = ({ customerId }: CustomerUpdateFormProps) => {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input disabled={isPending} {...field} placeholder="123-456-7890" type="tel" />
+                <Input disabled={isPending || loading} {...field} placeholder="123-456-7890" type="tel" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -82,7 +121,7 @@ const CustomerUpdateForm = ({ customerId }: CustomerUpdateFormProps) => {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input disabled={isPending} {...field} placeholder="123 Main St" />
+                <Input disabled={isPending || loading} {...field} placeholder="123 Main St" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -90,8 +129,8 @@ const CustomerUpdateForm = ({ customerId }: CustomerUpdateFormProps) => {
         </div>
         <FormError message={error} />
         <FormSuccess message={success} />
-        <Button disabled={isPending} type="submit" className="w-full">
-          {isPending ? "Updating..." : "Update Customer"}
+        <Button disabled={isPending || loading} type="submit" className="w-full">
+          {isPending || loading ? "Updating..." : "Update Customer"}
         </Button>
       </form>
     </Form>

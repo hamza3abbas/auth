@@ -1,10 +1,11 @@
-"use client"
 import { CustomerForm } from "@/src/components/dashboard/customers/customers-form";
 
-const CustomersPage = () => {
+const AddCustomer = () => {
   return (
-    <CustomerForm/>
+    <div>
+     <CustomerForm/>
+    </div>
   );
 };
 
-export default CustomersPage;
+export default AddCustomer;
