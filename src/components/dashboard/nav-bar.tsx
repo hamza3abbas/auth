@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 
 import { LogoutButton } from "../auth/logout";
 import { UserCircle,ShoppingCart, Search } from "lucide-react";
+import { ModeToggle } from "../switch-theme";
 
 const DashboardNavBar = () => {
   return (
@@ -105,6 +106,7 @@ const DashboardNavBar = () => {
         </div>
       </form>
     </div>
+    <ModeToggle/>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
