@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/src/lib/utils';
 import { Arrow } from '@radix-ui/react-dropdown-menu';
-import { Settings } from 'lucide-react';
+import { NewspaperIcon, Settings } from 'lucide-react';
 
 
 const Sidebar = () => {
@@ -16,6 +16,7 @@ const Sidebar = () => {
     const navItems = {
       ADMIN: [
         { name: 'Dashboard', path: '/dashboard', icon: <DashboardIcon className="h-4 w-4" /> },
+        { name: 'CMS', path: '/dashboard/cms', icon: <NewspaperIcon className="h-4 w-4" /> },
         { name: 'Customers', path: '/dashboard/customers', icon: <PersonIcon className="h-4 w-4" /> },
         { name: 'Leads', path: '/dashboard/leads', icon: <ArrowUpIcon className="h-4 w-4" /> },
         { name: 'Invoices', path: '/dashboard/invoices', icon: <PaperPlaneIcon className="h-4 w-4" /> },
@@ -40,6 +41,11 @@ const Sidebar = () => {
         { name: 'Home', path: '#', icon: <HomeIcon className="h-4 w-4" /> },
         { name: 'About', path: '#', icon: <InfoCircledIcon className="h-4 w-4" /> },
         { name: 'Contact', path: '#', icon: <EnvelopeOpenIcon className="h-4 w-4" /> },
+        
+      ],
+      AUTHOR: [
+        { name: 'Dashboard', path: '/dashboard', icon: <DashboardIcon className="h-4 w-4" /> },
+        { name: 'CMS', path: '/dashboard/cms', icon: <NewspaperIcon className="h-4 w-4" /> },  
       ],
     };
   

@@ -1,6 +1,6 @@
 datasource db {
   provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
 }
 
 generator client {
@@ -13,6 +13,12 @@ enum UserRole {
   MANAGER
   DRIVER
   ADMIN
+  AUTHOR 
+}
+enum PostStatus {  
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 model User {
@@ -26,6 +32,8 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean   @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+
+  posts                 Post[]    @relation("UserPosts")
 
   // Relations to CRM Models
   leads                 Lead[]      @relation("UserLeads")
@@ -55,13 +63,30 @@ model Account {
   @@map("accounts")
 }
 
+model Post {
+  id            String     @id @default(cuid())
+  title         String
+  description   String?    // Added description field
+  content       String
+  placeholderImage String? // Added placeholder image field
+  status        PostStatus @default(DRAFT) // Added status field with default value
+  published     Boolean    @default(false)
+  authorId      String
+  author        User       @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("posts")
+}
+
+
 model VerificationToken {
   id            String    @id @default(cuid())
   email         String
   token         String    @unique
   expires       DateTime 
 
-  @@unique([email,token ])
+  @@unique([email,token])
 }
 
 model PasswordResetToken {

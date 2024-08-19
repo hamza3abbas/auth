@@ -15,12 +15,15 @@ import { Badge } from "@/src/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
 import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
 import Image from "next/image";
-import { Customer } from "@prisma/client";
+import { Customer, Post, User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-const Customers = () => {
-  const [customers, setCustomers] = useState<Customer[] | null>(null);
+import { truncateString } from "@/src/lib/utils";
+type PostWithUser = Post & {
+  author: User;
+};
+const Posts = () => {
+  const [posts, setPosts] = useState<PostWithUser[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -31,15 +34,15 @@ const Customers = () => {
       setError(null);
 
       try {
-        const response = await fetch(`/api/customers/${id}`, {
+        const response = await fetch(`/api/cms/${id}`, {
           method: 'DELETE',
         });
 
-        if (!response.ok) throw new Error('Failed to delete customer');
+        if (!response.ok) throw new Error('Failed to delete post');
 
         // Remove the deleted customer from the list immediately
-        setCustomers((prevCustomers) =>
-          prevCustomers ? prevCustomers.filter((customer) => customer.id !== id) : null
+        setPosts((prevPosts) =>
+        prevPosts ? prevPosts.filter((post) => post.id !== id) : null
         );
 
         // Optionally, refresh the page after a delay to reflect the changes
@@ -53,14 +56,14 @@ const Customers = () => {
   };
 
   useEffect(() => {
-    const fetchCustomers = async () => {
+    const fetchPosts = async () => {
       try {
-        const response = await fetch('/api/customers');
+        const response = await fetch('/api/cms');
         const data = await response.json();
         if (response.ok) {
-          setCustomers(data);
+          setPosts(data);
         } else {
-          setError(data.error || 'Failed to fetch customers');
+          setError(data.error || 'Failed to fetch posts');
         }
       } catch (err) {
         setError('An unexpected error occurred');
@@ -69,7 +72,7 @@ const Customers = () => {
       }
     };
 
-    fetchCustomers();
+    fetchPosts();
   }, []);
 
   if (loading) return <p>Loading...</p>;
@@ -92,7 +95,7 @@ const Customers = () => {
     );
   }
 
-  if (customers?.length === 0) {
+  if (posts?.length === 0) {
     return (
       <>
         <div className="flex items-center">
@@ -101,13 +104,13 @@ const Customers = () => {
         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
           <div className="flex flex-col items-center gap-1 text-center">
             <h3 className="text-2xl font-bold tracking-tight">
-              You have no customers records
+              You have no posts available
             </h3>
             <p className="text-sm text-muted-foreground">
-              You can start adding customers.
+              You can start adding posts.
             </p>
-            <Link href={'/dashboard/customers/add-customer'}>
-            <Button className="mt-4">Add Customer</Button>
+            <Link href={'/dashboard/cms/add-post'}>
+            <Button className="mt-4">Add Post</Button>
             </Link>
           </div>
         </div>
@@ -142,11 +145,11 @@ const Customers = () => {
               Export
             </span>
           </Button>
-          <Link href={'/dashboard/customers/add-customer'}>
+          <Link href={'/dashboard/cms/add-post'}>
             <Button size="sm" className="h-7 gap-1">
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Customer
+                Add Posts
               </span>
             </Button>
           </Link>
@@ -155,44 +158,46 @@ const Customers = () => {
       <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <Card>
           <CardHeader>
-            <CardTitle>Customers</CardTitle>
+            <CardTitle>Posts</CardTitle>
             <CardDescription>
-              Manage your customers and view their activity.
+              Manage your posts.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Description</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Created at</TableHead>
+                  <TableHead>Published</TableHead>
+                  <TableHead>Author</TableHead>
                   <TableHead>
                    Actions
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {customers?.map((customer) => (
-                  <TableRow key={customer?.id}>
+                {posts?.map((post) => (
+                  <TableRow key={post?.id}>
                     {/* <TableCell className="hidden sm:table-cell">
                       <Image
-                        alt={`${customer?.name}'s image`}
+                        alt={`${post?.placeholderImage}'s image`}
                         className="aspect-square rounded-md object-cover"
                         height="64"
                         src={"/profile.jpg"}
                         width="64"
                       />
                     </TableCell> */}
-                    <TableCell className="font-medium">{customer.name}</TableCell>
-                    <TableCell>{customer.email}</TableCell>
+                    <TableCell className="font-medium">{post.title}</TableCell>
+                    <TableCell>{post.description || 'No description'}</TableCell>
                     <TableCell>
-                      <Badge variant={customer?.address ? "success" : "destructive"}>
-                        {customer.address ? "Active" : "Inactive"}
-                      </Badge>
+                      <Badge variant={ post.status === 'DRAFT'? 'destructive' : post.status === 'ARCHIVED' ? "default" : "success"}>
+                     {post.status}
+                     </Badge>
                     </TableCell>
-                    <TableCell>{new Date(customer.createdAt).toLocaleDateString()}</TableCell>
+                    <TableCell>{post.published ? 'Yes' : 'No'}</TableCell>
+                    <TableCell>{truncateString(post.author.name || 'Unknown',20)}</TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -206,13 +211,11 @@ const Customers = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <Link href={`/dashboard/customers/${customer?.id}`}>
+                          <Link href={`/dashboard/cms/${post?.id}`}>
                             <DropdownMenuItem>Edit</DropdownMenuItem>
                           </Link>
-                        
-                          <DropdownMenuItem>Debug</DropdownMenuItem>
                           <DropdownMenuItem className="bg-destructive text-white" onClick={() => {
-                            handleDelete(customer?.id);
+                            handleDelete(post?.id);
                           }}>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -224,8 +227,8 @@ const Customers = () => {
           </CardContent>
           <CardFooter>
             <div className="text-xs text-muted-foreground">
-              Showing <strong>1-{customers?.length}</strong> of{" "}
-              <strong>{customers?.length}</strong> customers
+              Showing <strong>1-{posts?.length}</strong> of{" "}
+              <strong>{posts?.length}</strong> customers
             </div>
           </CardFooter>
         </Card>
@@ -234,4 +237,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default Posts;

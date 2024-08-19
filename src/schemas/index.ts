@@ -53,6 +53,28 @@ export const CustomerCreateSchema = z.object({
     phone: z.string().optional(),
     address: z.string().optional(),
   });
+
+  export const PostCreateSchema = z.object({
+    title: z.string().min(1, "Title is required."),
+    description: z.string().optional(),
+    content: z.string().min(1, "Content is required."),
+    placeholderImage: z.string().url("Must be a valid URL.").optional(),
+    status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).default('DRAFT'),
+    published: z.boolean().optional().default(false),
+    authorId: z.string().min(1, "Author ID is required."),
+  });
+  
+  
+
+  export const PostUpdateSchema = z.object({
+    title: z.string().min(1, "Title is required.").optional(),
+    description: z.string().optional(),
+    content: z.string().min(1, "Content is required.").optional(),
+    placeholderImage: z.string().url("Must be a valid URL.").optional(),
+    status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(),
+    published: z.boolean().optional(),
+  });
+  
   export const LeadCreateSchema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email format").optional(),
